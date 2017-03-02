@@ -1,0 +1,24 @@
+version: '2'
+
+services:
+    web:
+        image: nginx:latest
+        ports:
+            - "8080:80"
+        volumes:
+            - ./code:/var/www/default
+            - ./files/networked-site.conf:/etc/nginx/conf.d/default.conf
+        networks:
+            - your-network
+    php:
+        image: php:fpm
+        volumes:
+            - ./code:/var/www/default
+            - ./files/php-fpm.conf:/usr/local/etc/php-fpm.d/zz-custom.conf
+            - ./files/supervisor.conf:/etc/supervisor/conf.d/zz-custom.conf
+        networks:
+            - your-network
+
+networks:
+    your-network:
+        driver: bridge
